@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import apiService from '../../services/api';
 
 const PhotoUploadComponent = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -15,26 +16,42 @@ const PhotoUploadComponent = () => {
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
 
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
+    try {
+      const formData = new FormData();
       
-      // Simulate upload progress
-      setUploadProgress(prev => ({ ...prev, [file.name]: 0 }));
+      // Add form data
+      formData.append('category', category);
+      formData.append('description', description);
+      formData.append('project_id', '1'); // You might want to make this dynamic
       
-      // Simulate file upload with progress
-      for (let progress = 0; progress <= 100; progress += 10) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        setUploadProgress(prev => ({ ...prev, [file.name]: progress }));
-      }
-    }
+      // Add files
+      selectedFiles.forEach(file => {
+        formData.append('photos', file);
+      });
 
-    // Reset form after upload
-    setTimeout(() => {
+      // Simulate upload progress for UI
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        setUploadProgress(prev => ({ ...prev, [file.name]: 0 }));
+        
+        for (let progress = 0; progress <= 100; progress += 20) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+          setUploadProgress(prev => ({ ...prev, [file.name]: progress }));
+        }
+      }
+
+      // Make actual API call
+      const response = await apiService.uploadPhotos(formData);
+      
+      // Reset form after upload
       setSelectedFiles([]);
       setUploadProgress({});
       setDescription('');
       alert('Photos uploaded successfully!');
-    }, 1000);
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('Upload failed: ' + error.message);
+    }
   };
 
   const removeFile = (index) => {

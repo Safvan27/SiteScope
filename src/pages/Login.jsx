@@ -63,28 +63,9 @@ const Login = () => {
     setError('');
     
     try {
-      // Auto-detect role from email
-      const detectedRole = detectRoleFromEmail(credentials.email);
-      
-      // Mock authentication - replace with actual API call
-      const user = mockUsers.find(
-        u => u.email === credentials.email && 
-             u.password === credentials.password &&
-             u.role === detectedRole
-      );
-      
-      if (user) {
-        login({
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role
-        });
-      } else {
-        setError('Invalid email or password');
-      }
+      await login(credentials);
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

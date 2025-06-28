@@ -1,5 +1,6 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import apiService from '../services/api';
 
 const AuthContext = createContext();
 
@@ -17,31 +18,43 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Check for stored user data on component mount
-  useState(() => {
+  useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const storedToken = localStorage.getItem('token');
+    
+    if (storedUser && storedToken) {
       try {
         const userData = JSON.parse(storedUser);
         setUser(userData);
         setIsAuthenticated(true);
+        apiService.setToken(storedToken);
       } catch (error) {
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
       }
     }
     setLoading(false);
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(userData));
+  const login = async (credentials) => {
+    try {
+      const response = await apiService.login(credentials);
+      setUser(response.user);
+      setIsAuthenticated(true);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      return response;
+    } catch (error) {
+      throw error;
+    }
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    apiService.setToken(null);
   };
 
   const value = {
