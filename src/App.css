@@ -6,6 +6,30 @@
   background-attachment: fixed;
 }
 
+/* Admin Dashboard Background */
+.admin-dashboard {
+  background: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2076&q=80') center/cover no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+.admin-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(62, 54, 46, 0.7);
+  z-index: 1;
+}
+
+.admin-dashboard > * {
+  position: relative;
+  z-index: 2;
+}
+
 /* Dashboard Common Styles */
 .dashboard-header {
   display: flex;
@@ -58,14 +82,16 @@
 }
 
 .dashboard-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(62, 54, 46, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 4px solid #865D36;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(62, 54, 46, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 3px solid #865D36;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 220px;
+  margin: 0 auto;
 }
 
 .dashboard-card:hover {
@@ -74,9 +100,10 @@
 }
 
 .dashboard-card h3 {
-  margin: 0 0 15px 0;
-  color: #3E362E;
-  font-size: 18px;
+  margin: 0 0 12px 0;
+  color: #ffffff;
+  font-size: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .card-content {
@@ -84,31 +111,33 @@
 }
 
 .stat-number {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
-  color: #865D36;
+  color: #ffffff;
   margin-bottom: 5px;
-  text-shadow: 0 2px 4px rgba(134, 93, 54, 0.3);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
 }
 
 .card-content p {
   margin: 0;
-  color: #93785B;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .quick-actions {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .quick-actions h3 {
-  margin: 0 0 20px 0;
-  color: #3E362E;
+  margin: 0 0 16px 0;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .action-buttons {
