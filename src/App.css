@@ -2,7 +2,7 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #f7941e 75%, #ff6b35 100%);
+  background: linear-gradient(135deg, #42047e 0%, #42047e 25%, #07f49e 75%, #07f49e 100%);
   background-attachment: fixed;
 }
 
