@@ -1,6 +1,7 @@
 
 // Type definitions for the application
 export const USER_ROLES = {
+  ADMIN: 'admin',
   SUPERVISOR: 'supervisor',
   CLIENT: 'client'
 };
