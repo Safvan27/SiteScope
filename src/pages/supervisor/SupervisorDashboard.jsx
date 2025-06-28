@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 const SupervisorDashboard = () => {
   const { user, logout } = useAuth();
+  const [status, setStatus] = useState('active');
   
   return (
     <div className="supervisor-dashboard">
@@ -11,6 +12,21 @@ const SupervisorDashboard = () => {
         <h1>Supervisor Dashboard</h1>
         <div className="user-info">
           <span>Welcome, {user.name}</span>
+          <div className="status-toggle">
+            <span style={{ color: '#3E362E', fontWeight: '500' }}>Status:</span>
+            <button 
+              className={`status-indicator ${status}`}
+              onClick={() => {
+                const statuses = ['active', 'away', 'offline'];
+                const currentIndex = statuses.indexOf(status);
+                const nextIndex = (currentIndex + 1) % statuses.length;
+                setStatus(statuses[nextIndex]);
+              }}
+            >
+              <div className="status-dot"></div>
+              {status === 'active' ? 'Active' : status === 'away' ? 'Away' : 'Offline'}
+            </button>
+          </div>
           <button onClick={logout} className="logout-btn">Logout</button>
         </div>
       </header>

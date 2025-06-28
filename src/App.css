@@ -30,6 +30,54 @@
   z-index: 2;
 }
 
+/* Supervisor Dashboard Background */
+.supervisor-dashboard {
+  background: url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+.supervisor-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(62, 54, 46, 0.7);
+  z-index: 1;
+}
+
+.supervisor-dashboard > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Client Dashboard Background */
+.client-dashboard {
+  background: url('https://images.unsplash.com/photo-1590496793907-51c3a8090b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80') center/cover no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+.client-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(62, 54, 46, 0.7);
+  z-index: 1;
+}
+
+.client-dashboard > * {
+  position: relative;
+  z-index: 2;
+}
+
 /* Dashboard Common Styles */
 .dashboard-header {
   display: flex;
@@ -179,6 +227,57 @@
 
 .action-btn:hover:before {
   left: 100%;
+}
+
+/* Status Toggle Button */
+.status-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.status-indicator.active {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.status-indicator.away {
+  background: linear-gradient(135deg, #ffc107, #fd7e14);
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.status-indicator.offline {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.status-indicator:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Client Dashboard Specific */
