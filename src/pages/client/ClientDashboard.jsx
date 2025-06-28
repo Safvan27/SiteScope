@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const ClientDashboard = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   
   return (
     <div className="client-dashboard">
@@ -68,10 +70,10 @@ const ClientDashboard = () => {
         <div className="quick-actions">
           <h3>Quick Access</h3>
           <div className="action-buttons">
-            <button className="action-btn">View Progress</button>
-            <button className="action-btn">Photo Gallery</button>
-            <button className="action-btn">Timeline</button>
-            <button className="action-btn">Contact Supervisor</button>
+            <button className="action-btn" onClick={() => navigate('/client/progress')}>View Progress</button>
+            <button className="action-btn" onClick={() => navigate('/client/gallery')}>Photo Gallery</button>
+            <button className="action-btn" onClick={() => navigate('/client/timeline')}>Timeline</button>
+            <button className="action-btn" onClick={() => navigate('/client/communications')}>Contact Supervisor</button>
           </div>
         </div>
       </div>

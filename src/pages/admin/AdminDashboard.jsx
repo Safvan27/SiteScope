@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   
   return (
     <div className="admin-dashboard">
@@ -53,10 +55,10 @@ const AdminDashboard = () => {
         <div className="quick-actions">
           <h3>Admin Actions</h3>
           <div className="action-buttons">
-            <button className="action-btn">Manage Sites</button>
-            <button className="action-btn">User Management</button>
-            <button className="action-btn">System Settings</button>
-            <button className="action-btn">Reports</button>
+            <button className="action-btn" onClick={() => navigate('/admin/sites')}>Manage Sites</button>
+            <button className="action-btn" onClick={() => navigate('/admin/users')}>User Management</button>
+            <button className="action-btn" onClick={() => navigate('/admin/settings')}>System Settings</button>
+            <button className="action-btn" onClick={() => navigate('/admin/reports')}>Reports</button>
           </div>
         </div>
       </div>

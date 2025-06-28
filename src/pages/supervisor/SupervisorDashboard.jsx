@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const SupervisorDashboard = () => {
   const { user, logout } = useAuth();
   const [status, setStatus] = useState('active');
+  const navigate = useNavigate();
   
   return (
     <div className="supervisor-dashboard">
@@ -66,10 +68,10 @@ const SupervisorDashboard = () => {
         <div className="quick-actions">
           <h3>Quick Actions</h3>
           <div className="action-buttons">
-            <button className="action-btn">Update Progress</button>
-            <button className="action-btn">Upload Photos</button>
-            <button className="action-btn">Manage Tasks</button>
-            <button className="action-btn">Submit Report</button>
+            <button className="action-btn" onClick={() => navigate('/supervisor/progress')}>Update Progress</button>
+            <button className="action-btn" onClick={() => navigate('/supervisor/photos')}>Upload Photos</button>
+            <button className="action-btn" onClick={() => navigate('/supervisor/tasks')}>Manage Tasks</button>
+            <button className="action-btn" onClick={() => navigate('/supervisor/reports')}>Submit Report</button>
           </div>
         </div>
       </div>
