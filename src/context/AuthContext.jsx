@@ -14,16 +14,32 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Check for stored user data on component mount
+  useState(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+        setIsAuthenticated(true);
+      } catch (error) {
+        localStorage.removeItem('user');
+      }
+    }
+    setLoading(false);
+  }, []);
 
   const login = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    // Clear any stored user data
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
   };
@@ -32,7 +48,8 @@ export const AuthProvider = ({ children }) => {
     user,
     isAuthenticated,
     login,
-    logout
+    logout,
+    loading
   };
 
   return (

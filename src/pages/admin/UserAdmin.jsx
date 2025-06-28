@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 const UserAdmin = () => {
@@ -39,11 +38,10 @@ const UserAdmin = () => {
   };
 
   return (
-    <div className="user-admin">
-      <div className="page-header">
-        <h1>User Administration</h1>
-        <button className="btn-primary">Add New User</button>
-      </div>
+    <div className="admin-dashboard">
+      <DashboardHeader title="User Administration" />
+      <div className="dashboard-content">
+        <h2 style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>User Administration</h2>
 
       <div className="users-grid">
         {users.map(user => (
@@ -69,6 +67,7 @@ const UserAdmin = () => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

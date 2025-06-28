@@ -9,7 +9,19 @@ import { USER_ROLES } from './types';
 import './App.css';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
+
+  if (loading) {
+    return <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh',
+      background: 'linear-gradient(135deg, #3E362E 0%, #865D36 25%, #93785B 75%, #AC8968 100%)',
+      color: 'white',
+      fontSize: '18px'
+    }}>Loading...</div>;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -23,7 +35,19 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 };
 
 const AppRoutes = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
+
+  if (loading) {
+    return <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh',
+      background: 'linear-gradient(135deg, #3E362E 0%, #865D36 25%, #93785B 75%, #AC8968 100%)',
+      color: 'white',
+      fontSize: '18px'
+    }}>Loading...</div>;
+  }
 
   if (!isAuthenticated) {
     return (

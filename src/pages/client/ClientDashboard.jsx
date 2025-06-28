@@ -2,6 +2,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const ClientDashboard = () => {
   const { user, logout } = useAuth();
@@ -9,13 +10,7 @@ const ClientDashboard = () => {
   
   return (
     <div className="client-dashboard">
-      <header className="dashboard-header">
-        <h1>Client Dashboard</h1>
-        <div className="user-info">
-          <span>Welcome, {user.name}</span>
-          <button onClick={logout} className="logout-btn">Logout</button>
-        </div>
-      </header>
+      <DashboardHeader title="Client Dashboard" showBackButton={false} />
       
       <div className="dashboard-content">
         <div className="project-overview">

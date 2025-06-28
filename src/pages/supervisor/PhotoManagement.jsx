@@ -1,8 +1,6 @@
-
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import PhotoUploadComponent from '../../components/supervisor/PhotoUploadComponent';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const PhotoManagement = () => {
   const { user, logout } = useAuth();
@@ -20,15 +18,7 @@ const PhotoManagement = () => {
 
   return (
     <div className="supervisor-dashboard">
-      <header className="dashboard-header">
-        <h1>Photo Management</h1>
-        <div className="user-info">
-          <span>Welcome, {user.name}</span>
-          <button onClick={() => navigate('/supervisor/dashboard')} className="back-btn">Back to Dashboard</button>
-          <button onClick={logout} className="logout-btn">Logout</button>
-        </div>
-      </header>
-      
+      <DashboardHeader title="Photo Management" />
       <div className="dashboard-content">
         <div className="tab-navigation">
           <button 

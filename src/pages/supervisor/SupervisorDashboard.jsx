@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const SupervisorDashboard = () => {
   const { user, logout } = useAuth();
@@ -10,25 +11,7 @@ const SupervisorDashboard = () => {
   
   return (
     <div className="supervisor-dashboard">
-      <header className="dashboard-header">
-        <h1>Supervisor Dashboard</h1>
-        <div className="user-info">
-          <span>Welcome, {user.name}</span>
-          <div className="status-toggle">
-            <span style={{ color: '#3E362E', fontWeight: '500' }}>Status:</span>
-            <select 
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className={`status-select ${status}`}
-            >
-              <option value="active">🟢 Active</option>
-              <option value="away">🟡 Away</option>
-              <option value="offline">🔴 Offline</option>
-            </select>
-          </div>
-          <button onClick={logout} className="logout-btn">Logout</button>
-        </div>
-      </header>
+      <DashboardHeader title="Supervisor Dashboard" showBackButton={false} />
       
       <div className="dashboard-content">
         <div className="dashboard-grid">
