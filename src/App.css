@@ -229,7 +229,7 @@
   left: 100%;
 }
 
-/* Status Toggle Button */
+/* Status Toggle Dropdown */
 .status-toggle {
   display: flex;
   align-items: center;
@@ -237,10 +237,7 @@
   margin-left: 20px;
 }
 
-.status-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.status-select {
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 14px;
@@ -250,34 +247,33 @@
   border: none;
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  outline: none;
 }
 
-.status-indicator.active {
+.status-select.active {
   background: linear-gradient(135deg, #28a745, #20c997);
   box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 }
 
-.status-indicator.away {
+.status-select.away {
   background: linear-gradient(135deg, #ffc107, #fd7e14);
   box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
 
-.status-indicator.offline {
+.status-select.offline {
   background: linear-gradient(135deg, #6c757d, #495057);
   box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
 }
 
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
-}
-
-.status-indicator:hover {
+.status-select:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.status-select option {
+  background: #fff;
+  color: #333;
+  padding: 8px;
 }
 
 /* Client Dashboard Specific */

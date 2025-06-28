@@ -14,18 +14,15 @@ const SupervisorDashboard = () => {
           <span>Welcome, {user.name}</span>
           <div className="status-toggle">
             <span style={{ color: '#3E362E', fontWeight: '500' }}>Status:</span>
-            <button 
-              className={`status-indicator ${status}`}
-              onClick={() => {
-                const statuses = ['active', 'away', 'offline'];
-                const currentIndex = statuses.indexOf(status);
-                const nextIndex = (currentIndex + 1) % statuses.length;
-                setStatus(statuses[nextIndex]);
-              }}
+            <select 
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className={`status-select ${status}`}
             >
-              <div className="status-dot"></div>
-              {status === 'active' ? 'Active' : status === 'away' ? 'Away' : 'Offline'}
-            </button>
+              <option value="active">🟢 Active</option>
+              <option value="away">🟡 Away</option>
+              <option value="offline">🔴 Offline</option>
+            </select>
           </div>
           <button onClick={logout} className="logout-btn">Logout</button>
         </div>
