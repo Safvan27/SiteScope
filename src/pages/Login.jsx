@@ -7,13 +7,30 @@ import './Login.css';
 const Login = () => {
   const [credentials, setCredentials] = useState({
     email: '',
-    password: '',
-    role: USER_ROLES.CLIENT
+    password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
   const { login } = useAuth();
+  
+  // Function to detect role from email
+  const detectRoleFromEmail = (email) => {
+    const emailLower = email.toLowerCase();
+    
+    // Admin detection - emails starting with 'admin'
+    if (emailLower.startsWith('admin@')) {
+      return USER_ROLES.ADMIN;
+    }
+    
+    // Supervisor detection - emails starting with 'supervisor' or 'super'
+    if (emailLower.startsWith('supervisor@') || emailLower.startsWith('super@')) {
+      return USER_ROLES.SUPERVISOR;
+    }
+    
+    // Client detection - default for all other emails
+    return USER_ROLES.CLIENT;
+  };
   
   // Mock user database - replace with actual API call
   const mockUsers = [
@@ -46,11 +63,14 @@ const Login = () => {
     setError('');
     
     try {
+      // Auto-detect role from email
+      const detectedRole = detectRoleFromEmail(credentials.email);
+      
       // Mock authentication - replace with actual API call
       const user = mockUsers.find(
         u => u.email === credentials.email && 
              u.password === credentials.password &&
-             u.role === credentials.role
+             u.role === detectedRole
       );
       
       if (user) {
@@ -61,7 +81,7 @@ const Login = () => {
           role: user.role
         });
       } else {
-        setError('Invalid credentials or role selection');
+        setError('Invalid email or password');
       }
     } catch (err) {
       setError('Login failed. Please try again.');
@@ -109,21 +129,6 @@ const Login = () => {
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="role">Role:</label>
-            <select
-              id="role"
-              name="role"
-              value={credentials.role}
-              onChange={handleChange}
-              required
-            >
-              <option value={USER_ROLES.CLIENT}>Client</option>
-              <option value={USER_ROLES.SUPERVISOR}>Supervisor</option>
-              <option value={USER_ROLES.ADMIN}>Admin</option>
-            </select>
-          </div>
-          
           {error && <div className="error-message">{error}</div>}
           
           <button 
@@ -140,6 +145,7 @@ const Login = () => {
           <p><strong>Admin:</strong> admin@construction.com / admin123</p>
           <p><strong>Supervisor:</strong> supervisor@construction.com / super123</p>
           <p><strong>Client:</strong> client@construction.com / client123</p>
+          <p><em>Role is automatically detected from email prefix</em></p>
         </div>
       </div>
     </div>
