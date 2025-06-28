@@ -37,7 +37,7 @@
 .login-card h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #333;
+  color: #3E362E;
   font-size: 24px;
 }
 
@@ -53,7 +53,7 @@
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #555;
+  color: #3E362E;
   font-weight: 500;
 }
 
@@ -61,7 +61,7 @@
 .form-group select {
   width: 100%;
   padding: 12px;
-  border: 2px solid #ddd;
+  border: 2px solid #A69080;
   border-radius: 5px;
   font-size: 16px;
   transition: border-color 0.3s;
@@ -70,11 +70,11 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #865D36;
 }
 
 .login-button {
-  background: linear-gradient(135deg, #f7941e 0%, #ff6b35 100%);
+  background: linear-gradient(135deg, #865D36 0%, #93785B 100%);
   color: white;
   padding: 12px;
   border: none;
@@ -84,7 +84,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 10px;
-  box-shadow: 0 4px 15px rgba(247, 148, 30, 0.3);
+  box-shadow: 0 4px 15px rgba(134, 93, 54, 0.3);
 }
 
 .login-button:hover:not(:disabled) {
@@ -109,20 +109,20 @@
 .demo-credentials {
   margin-top: 30px;
   padding: 20px;
-  background: rgba(248, 249, 250, 0.8);
+  background: rgba(166, 144, 128, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 10px;
-  border-left: 4px solid #f7941e;
+  border-left: 4px solid #865D36;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .demo-credentials h4 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: #3E362E;
 }
 
 .demo-credentials p {
   margin: 5px 0;
   font-size: 14px;
-  color: #666;
+  color: #93785B;
 }

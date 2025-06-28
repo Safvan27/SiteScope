@@ -28,12 +28,12 @@
 .stat-card h3 {
   font-size: 2rem;
   margin: 0 0 10px 0;
-  color: #007bff;
+  color: #865D36;
 }
 
 .stat-card p {
   margin: 0;
-  color: #666;
+  color: #93785B;
   font-weight: 500;
 }
 
@@ -48,7 +48,7 @@
   background: white;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(62, 54, 46, 0.1);
 }
 
 .site-header {
@@ -60,7 +60,7 @@
 
 .site-header h3 {
   margin: 0;
-  color: #333;
+  color: #3E362E;
 }
 
 .status-badge {
@@ -87,7 +87,7 @@
 
 .progress-fill {
   height: 100%;
-  background: #007bff;
+  background: #865D36;
   transition: width 0.3s ease;
 }
 
@@ -115,7 +115,7 @@
   background: white;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(62, 54, 46, 0.1);
 }
 
 .sites-table table {
@@ -226,7 +226,7 @@
 
 /* Buttons */
 .btn-primary {
-  background: #007bff;
+  background: #865D36;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -236,7 +236,7 @@
 }
 
 .btn-secondary {
-  background: #6c757d;
+  background: #A69080;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -246,7 +246,7 @@
 }
 
 .btn-edit {
-  background: #28a745;
+  background: #93785B;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -256,7 +256,7 @@
 }
 
 .btn-view {
-  background: #17a2b8;
+  background: #AC8968;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -266,7 +266,7 @@
 }
 
 .btn-delete {
-  background: #dc3545;
+  background: #3E362E;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -276,8 +276,8 @@
 }
 
 .btn-warning {
-  background: #ffc107;
-  color: #212529;
+  background: #AC8968;
+  color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -286,7 +286,7 @@
 }
 
 .btn-success {
-  background: #28a745;
+  background: #93785B;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -296,7 +296,7 @@
 }
 
 .btn-danger {
-  background: #dc3545;
+  background: #3E362E;
   color: white;
   border: none;
   padding: 6px 12px;

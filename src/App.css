@@ -2,7 +2,7 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #42047e 0%, #42047e 25%, #07f49e 75%, #07f49e 100%);
+  background: linear-gradient(135deg, #3E362E 0%, #865D36 25%, #93785B 75%, #AC8968 100%);
   background-attachment: fixed;
 }
 
@@ -16,12 +16,12 @@
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   margin-bottom: 30px;
-  border-bottom: 3px solid #f7941e;
+  border-bottom: 3px solid #865D36;
 }
 
 .dashboard-header h1 {
   margin: 0;
-  color: #333;
+  color: #3E362E;
 }
 
 .user-info {
@@ -31,7 +31,7 @@
 }
 
 .logout-btn {
-  background: #dc3545;
+  background: #3E362E;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -41,7 +41,7 @@
 }
 
 .logout-btn:hover {
-  background: #c82333;
+  background: #2a2621;
 }
 
 .dashboard-content {
@@ -62,20 +62,20 @@
   backdrop-filter: blur(15px);
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 32px rgba(62, 54, 46, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 4px solid #f7941e;
+  border-left: 4px solid #865D36;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .dashboard-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 40px rgba(62, 54, 46, 0.15);
 }
 
 .dashboard-card h3 {
   margin: 0 0 15px 0;
-  color: #333;
+  color: #3E362E;
   font-size: 18px;
 }
 
@@ -86,14 +86,14 @@
 .stat-number {
   font-size: 32px;
   font-weight: bold;
-  color: #f7941e;
+  color: #865D36;
   margin-bottom: 5px;
-  text-shadow: 0 2px 4px rgba(247, 148, 30, 0.3);
+  text-shadow: 0 2px 4px rgba(134, 93, 54, 0.3);
 }
 
 .card-content p {
   margin: 0;
-  color: #666;
+  color: #93785B;
   font-size: 14px;
 }
 
@@ -108,7 +108,7 @@
 
 .quick-actions h3 {
   margin: 0 0 20px 0;
-  color: #333;
+  color: #3E362E;
 }
 
 .action-buttons {
@@ -118,7 +118,7 @@
 }
 
 .action-btn {
-  background: linear-gradient(135deg, #f7941e 0%, #ff6b35 100%);
+  background: linear-gradient(135deg, #865D36 0%, #93785B 100%);
   color: white;
   border: none;
   padding: 12px 20px;
@@ -127,7 +127,7 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(247, 148, 30, 0.3);
+  box-shadow: 0 4px 15px rgba(134, 93, 54, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -145,7 +145,7 @@
 
 .action-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(247, 148, 30, 0.4);
+  box-shadow: 0 6px 25px rgba(134, 93, 54, 0.4);
 }
 
 .action-btn:hover:before {
@@ -174,7 +174,7 @@
 
 .project-card h4 {
   margin: 0 0 20px 0;
-  color: #333;
+  color: #3E362E;
   font-size: 20px;
 }
 
@@ -183,7 +183,7 @@
 }
 
 .progress-bar {
-  background: #e9ecef;
+  background: #A69080;
   height: 10px;
   border-radius: 5px;
   overflow: hidden;
@@ -191,20 +191,20 @@
 }
 
 .progress-fill {
-  background: linear-gradient(135deg, #f7941e 0%, #ff6b35 100%);
+  background: linear-gradient(135deg, #865D36 0%, #93785B 100%);
   height: 100%;
   transition: width 0.3s ease;
-  box-shadow: 0 2px 10px rgba(247, 148, 30, 0.3);
+  box-shadow: 0 2px 10px rgba(134, 93, 54, 0.3);
 }
 
 .progress-text {
   font-weight: 500;
-  color: #667eea;
+  color: #865D36;
 }
 
 .project-details p {
   margin: 8px 0;
-  color: #666;
+  color: #93785B;
 }
 
 /* Responsive */
