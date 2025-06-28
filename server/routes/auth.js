@@ -1,80 +1,146 @@
 
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const pool = require('../config/database');
+const supabase = require('../config/database');
 
 const router = express.Router();
 
-// Login
+// Login route
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    
-    if (result.rows.length === 0) {
+    // Authenticate with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (authError) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const user = result.rows[0];
+    // Get user profile from our users table
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
 
-    // Check password
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    if (userError || !userData) {
+      return res.status(404).json({ error: 'User profile not found' });
     }
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'your-secret-key',
+      { 
+        userId: userData.id, 
+        email: userData.email, 
+        role: userData.role 
+      },
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
-    // Return user data without password
-    const { password: _, ...userWithoutPassword } = user;
-    
     res.json({
-      user: userWithoutPassword,
-      token
+      token,
+      user: {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role,
+        status: userData.status
+      }
     });
+
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Register
+// Register route
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { email, password, name, role } = req.body;
 
-    // Check if user already exists
-    const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (existingUser.rows.length > 0) {
-      return res.status(400).json({ error: 'User already exists' });
+    // Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (authError) {
+      return res.status(400).json({ error: authError.message });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create user profile in our users table
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .insert([{
+        email,
+        name,
+        role: role || 'client',
+        auth_user_id: authData.user?.id
+      }])
+      .select()
+      .single();
 
-    // Create user
-    const result = await pool.query(
-      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
-      [name, email, hashedPassword, role]
-    );
+    if (userError) {
+      return res.status(400).json({ error: 'Failed to create user profile' });
+    }
 
-    const { password: _, ...userWithoutPassword } = result.rows[0];
-    
     res.status(201).json({
-      message: 'User created successfully',
-      user: userWithoutPassword
+      message: 'User registered successfully',
+      user: {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role
+      }
     });
+
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Verify token route
+router.get('/verify', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Get current user data
+    const { data: userData, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', decoded.userId)
+      .single();
+
+    if (error || !userData) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      user: {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role,
+        status: userData.status
+      }
+    });
+
+  } catch (error) {
+    console.error('Token verification error:', error);
+    res.status(401).json({ error: 'Invalid token' });
   }
 });
 

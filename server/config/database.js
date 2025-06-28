@@ -1,19 +1,39 @@
 
-const { Pool } = require('pg');
+const { createClient } = require('@supabase/supabase-js');
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/construction_tracker',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+// Create Supabase client with service role key for server-side operations
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
 });
 
 // Test the connection
-pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database');
-});
+const testConnection = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('count')
+      .limit(1);
+    
+    if (error && error.code !== 'PGRST116') { // PGRST116 is "relation does not exist"
+      console.error('Supabase connection error:', error);
+    } else {
+      console.log('Connected to Supabase database');
+    }
+  } catch (err) {
+    console.error('Supabase connection test failed:', err);
+  }
+};
 
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
-});
+testConnection();
 
-module.exports = pool;
+module.exports = supabase;

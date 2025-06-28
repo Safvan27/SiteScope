@@ -1,5 +1,13 @@
 
+import { createClient } from '@supabase/supabase-js';
+
 const API_BASE_URL = 'http://localhost:5000/api';
+
+// Supabase client for direct operations
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'your-supabase-url';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-supabase-anon-key';
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 class ApiService {
   constructor() {
@@ -119,7 +127,7 @@ class ApiService {
     });
   }
 
-  // Photo methods
+  // Photo methods using server endpoints
   async uploadPhotos(formData) {
     return this.request('/photos/upload', {
       method: 'POST',
@@ -141,6 +149,37 @@ class ApiService {
     return this.request(`/photos/${id}`, {
       method: 'DELETE',
     });
+  }
+
+  // Direct Supabase methods for real-time features
+  async subscribeToPhotos(projectId, callback) {
+    return supabase
+      .channel('photos')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'photos',
+          filter: `project_id=eq.${projectId}`
+        }, 
+        callback
+      )
+      .subscribe();
+  }
+
+  async subscribeToTasks(projectId, callback) {
+    return supabase
+      .channel('tasks')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'tasks',
+          filter: `project_id=eq.${projectId}`
+        }, 
+        callback
+      )
+      .subscribe();
   }
 }
 

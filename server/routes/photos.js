@@ -2,37 +2,20 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
-const pool = require('../config/database');
-const { authenticateToken } = require('../middleware/auth');
+const supabase = require('../config/database');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 
-// Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `${uuidv4()}-${Date.now()}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
-  }
-});
-
+// Configure multer for memory storage (since we're uploading to Supabase)
+const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB limit
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif/;
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
 
@@ -41,118 +24,197 @@ const upload = multer({
     } else {
       cb(new Error('Only image files are allowed'));
     }
-  }
+  },
 });
 
 // Upload photos
-router.post('/upload', authenticateToken, upload.array('photos', 10), async (req, res) => {
+router.post('/upload', auth, upload.array('photos', 10), async (req, res) => {
   try {
-    const { project_id, task_id, category, description } = req.body;
-    const uploadedPhotos = [];
+    const { projectId, taskId, category, description } = req.body;
+    const files = req.files;
 
-    for (const file of req.files) {
-      const result = await pool.query(
-        'INSERT INTO photos (project_id, task_id, uploaded_by, filename, original_name, file_path, file_size, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-        [project_id, task_id, req.user.id, file.filename, file.originalname, file.path, file.size, category, description]
-      );
-      
-      uploadedPhotos.push(result.rows[0]);
+    if (!files || files.length === 0) {
+      return res.status(400).json({ error: 'No files uploaded' });
     }
 
-    res.status(201).json({
-      message: 'Photos uploaded successfully',
+    const uploadedPhotos = [];
+
+    for (const file of files) {
+      // Generate unique filename
+      const fileExt = path.extname(file.originalname);
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}${fileExt}`;
+      const filePath = `photos/${projectId}/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('construction-photos')
+        .upload(filePath, file.buffer, {
+          contentType: file.mimetype,
+          duplex: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        continue;
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('construction-photos')
+        .getPublicUrl(filePath);
+
+      // Save photo record to database
+      const { data: photoData, error: dbError } = await supabase
+        .from('photos')
+        .insert([{
+          project_id: projectId,
+          task_id: taskId || null,
+          uploaded_by: req.user.userId,
+          filename: fileName,
+          original_name: file.originalname,
+          file_path: urlData.publicUrl,
+          file_size: file.size,
+          category: category || 'progress',
+          description: description || ''
+        }])
+        .select()
+        .single();
+
+      if (!dbError) {
+        uploadedPhotos.push(photoData);
+      }
+    }
+
+    res.json({
+      message: `${uploadedPhotos.length} photos uploaded successfully`,
       photos: uploadedPhotos
     });
+
   } catch (error) {
-    console.error('Error uploading photos:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Photo upload error:', error);
+    res.status(500).json({ error: 'Failed to upload photos' });
   }
 });
 
 // Get photos for a project
-router.get('/project/:projectId', authenticateToken, async (req, res) => {
+router.get('/project/:projectId', auth, async (req, res) => {
   try {
     const { projectId } = req.params;
-    
-    const result = await pool.query(`
-      SELECT p.*, u.name as uploaded_by_name
-      FROM photos p
-      LEFT JOIN users u ON p.uploaded_by = u.id
-      WHERE p.project_id = $1
-      ORDER BY p.created_at DESC
-    `, [projectId]);
+    const { category, limit = 50, offset = 0 } = req.query;
 
-    res.json(result.rows);
+    let query = supabase
+      .from('photos')
+      .select(`
+        *,
+        uploaded_by_user:users!uploaded_by(name),
+        project:projects(name),
+        task:tasks(name)
+      `)
+      .eq('project_id', projectId)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + parseInt(limit) - 1);
+
+    if (category) {
+      query = query.eq('category', category);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      return res.status(500).json({ error: 'Failed to fetch photos' });
+    }
+
+    res.json(data);
+
   } catch (error) {
-    console.error('Error fetching photos:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Get photos error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Get all photos (with filters)
-router.get('/', authenticateToken, async (req, res) => {
+// Get all photos with filters
+router.get('/', auth, async (req, res) => {
   try {
-    const { category, project_id } = req.query;
-    let query = `
-      SELECT p.*, u.name as uploaded_by_name, pr.name as project_name
-      FROM photos p
-      LEFT JOIN users u ON p.uploaded_by = u.id
-      LEFT JOIN projects pr ON p.project_id = pr.id
-      WHERE 1=1
-    `;
-    const queryParams = [];
+    const { category, projectId, limit = 50, offset = 0 } = req.query;
+
+    let query = supabase
+      .from('photos')
+      .select(`
+        *,
+        uploaded_by_user:users!uploaded_by(name),
+        project:projects(name),
+        task:tasks(name)
+      `)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + parseInt(limit) - 1);
 
     if (category) {
-      query += ' AND p.category = $' + (queryParams.length + 1);
-      queryParams.push(category);
+      query = query.eq('category', category);
     }
 
-    if (project_id) {
-      query += ' AND p.project_id = $' + (queryParams.length + 1);
-      queryParams.push(project_id);
+    if (projectId) {
+      query = query.eq('project_id', projectId);
     }
 
-    query += ' ORDER BY p.created_at DESC';
+    const { data, error } = await query;
 
-    const result = await pool.query(query, queryParams);
-    res.json(result.rows);
+    if (error) {
+      return res.status(500).json({ error: 'Failed to fetch photos' });
+    }
+
+    res.json(data);
+
   } catch (error) {
-    console.error('Error fetching photos:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Get photos error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
 // Delete photo
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    
-    // Get photo info first
-    const photoResult = await pool.query('SELECT * FROM photos WHERE id = $1', [id]);
-    
-    if (photoResult.rows.length === 0) {
+
+    // Get photo details first
+    const { data: photo, error: fetchError } = await supabase
+      .from('photos')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !photo) {
       return res.status(404).json({ error: 'Photo not found' });
     }
 
-    const photo = photoResult.rows[0];
+    // Extract file path from URL for storage deletion
+    const url = new URL(photo.file_path);
+    const pathParts = url.pathname.split('/');
+    const filePath = pathParts.slice(-2).join('/'); // Get last two parts (folder/filename)
 
-    // Check permissions
-    if (req.user.role !== 'admin' && photo.uploaded_by !== req.user.id) {
-      return res.status(403).json({ error: 'Permission denied' });
-    }
+    // Delete from Supabase Storage
+    const { error: storageError } = await supabase.storage
+      .from('construction-photos')
+      .remove([filePath]);
 
-    // Delete file from filesystem
-    if (fs.existsSync(photo.file_path)) {
-      fs.unlinkSync(photo.file_path);
+    if (storageError) {
+      console.error('Storage deletion error:', storageError);
     }
 
     // Delete from database
-    await pool.query('DELETE FROM photos WHERE id = $1', [id]);
+    const { error: dbError } = await supabase
+      .from('photos')
+      .delete()
+      .eq('id', id);
+
+    if (dbError) {
+      return res.status(500).json({ error: 'Failed to delete photo record' });
+    }
 
     res.json({ message: 'Photo deleted successfully' });
+
   } catch (error) {
-    console.error('Error deleting photo:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Delete photo error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 

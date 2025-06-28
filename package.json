@@ -25,6 +25,9 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1",
     "react-router-dom": "^7.6.3"
   }
 }
