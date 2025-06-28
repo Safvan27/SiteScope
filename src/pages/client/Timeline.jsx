@@ -1,5 +1,6 @@
 
 import React from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const Timeline = () => {
   const timelineEvents = [
@@ -30,8 +31,9 @@ const Timeline = () => {
   ];
 
   return (
-    <div className="timeline">
-      <h1>Project Timeline</h1>
+    <div className="client-dashboard">
+      <DashboardHeader title="Project Timeline" />
+      <div className="dashboard-content">
       <div className="timeline-content">
         {timelineEvents.map((event, index) => (
           <div key={index} className="timeline-item">
@@ -43,6 +45,7 @@ const Timeline = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

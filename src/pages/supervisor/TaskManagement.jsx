@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const TaskManagement = () => {
   const [tasks, setTasks] = useState([
@@ -40,11 +41,12 @@ const TaskManagement = () => {
   };
 
   return (
-    <div className="task-management">
-      <div className="page-header">
-        <h1>Task Management</h1>
-        <button className="btn-primary">Add New Task</button>
-      </div>
+    <div className="supervisor-dashboard">
+      <DashboardHeader title="Task Management" />
+      <div className="dashboard-content">
+        <div className="page-header">
+          <button className="btn-primary">Add New Task</button>
+        </div>
       
       <div className="tasks-list">
         {tasks.map(task => (
@@ -69,6 +71,7 @@ const TaskManagement = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

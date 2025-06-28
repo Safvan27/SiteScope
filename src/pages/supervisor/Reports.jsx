@@ -1,5 +1,6 @@
 
 import React from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const Reports = () => {
   const reports = [
@@ -27,11 +28,12 @@ const Reports = () => {
   ];
 
   return (
-    <div className="reports">
-      <div className="page-header">
-        <h1>Reports</h1>
-        <button className="btn-primary">Generate New Report</button>
-      </div>
+    <div className="supervisor-dashboard">
+      <DashboardHeader title="Reports" />
+      <div className="dashboard-content">
+        <div className="page-header">
+          <button className="btn-primary">Generate New Report</button>
+        </div>
 
       <div className="reports-list">
         {reports.map(report => (
@@ -48,6 +50,7 @@ const Reports = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

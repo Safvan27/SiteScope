@@ -1,13 +1,15 @@
 
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const ProjectProgress = () => {
   const { user } = useAuth();
 
   return (
-    <div className="project-progress">
-      <h1>Project Progress</h1>
+    <div className="client-dashboard">
+      <DashboardHeader title="Project Progress" />
+      <div className="dashboard-content">
       <div className="progress-content">
         <div className="project-details">
           <h2>Downtown Office Complex</h2>
@@ -39,6 +41,7 @@ const ProjectProgress = () => {
                 <span className="milestone-status">⏳ Pending</span>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

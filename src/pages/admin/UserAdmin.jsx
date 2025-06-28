@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const UserAdmin = () => {
   const [users] = useState([
@@ -41,7 +42,6 @@ const UserAdmin = () => {
     <div className="admin-dashboard">
       <DashboardHeader title="User Administration" />
       <div className="dashboard-content">
-        <h2 style={{ color: '#ffffff', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>User Administration</h2>
 
       <div className="users-grid">
         {users.map(user => (

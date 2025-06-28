@@ -89,6 +89,9 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   margin-bottom: 30px;
   border-bottom: 3px solid #865D36;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .header-left {

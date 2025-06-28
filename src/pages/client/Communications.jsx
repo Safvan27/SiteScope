@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const Communications = () => {
   const [messages] = useState([
@@ -30,8 +31,9 @@ const Communications = () => {
   ]);
 
   return (
-    <div className="communications">
-      <h1>Communications</h1>
+    <div className="client-dashboard">
+      <DashboardHeader title="Communications" />
+      <div className="dashboard-content">
       <div className="messages-list">
         {messages.map(message => (
           <div key={message.id} className={`message-item ${!message.read ? 'unread' : ''}`}>
@@ -43,6 +45,7 @@ const Communications = () => {
             <p className="message-content">{message.content}</p>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

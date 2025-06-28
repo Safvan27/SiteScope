@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const ProgressTracking = () => {
   const [progress, setProgress] = useState({
@@ -15,8 +16,9 @@ const ProgressTracking = () => {
   });
 
   return (
-    <div className="progress-tracking">
-      <h1>Progress Tracking</h1>
+    <div className="supervisor-dashboard">
+      <DashboardHeader title="Progress Tracking" />
+      <div className="dashboard-content">
       
       <div className="overall-progress">
         <h2>Overall Project Progress</h2>
@@ -48,6 +50,7 @@ const ProgressTracking = () => {
         <h2>Update Progress</h2>
         <button className="btn-primary">Add Progress Update</button>
         <button className="btn-secondary">Upload Photos</button>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { SiteManager, SiteForm } from '../../components/admin';
 
@@ -43,7 +42,9 @@ const SiteManagement = () => {
   };
 
   return (
-    <div className="site-management">
+    <div className="admin-dashboard">
+      <DashboardHeader title="Site Management" />
+      <div className="dashboard-content">
       <div className="page-header">
         <h1>Site Management</h1>
         <button 
@@ -69,6 +70,7 @@ const SiteManagement = () => {
         sites={sites}
         onDeleteSite={handleDeleteSite}
       />
+       </div>
     </div>
   );
 };

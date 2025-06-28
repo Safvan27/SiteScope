@@ -1,5 +1,6 @@
 
 import React from 'react';
+import DashboardHeader from '../../components/common/DashboardHeader';
 
 const Gallery = () => {
   const photos = [
@@ -27,8 +28,9 @@ const Gallery = () => {
   ];
 
   return (
-    <div className="gallery">
-      <h1>Project Gallery</h1>
+    <div className="client-dashboard">
+      <DashboardHeader title="Project Gallery" />
+      <div className="dashboard-content">
       <div className="photo-grid">
         {photos.map(photo => (
           <div key={photo.id} className="photo-item">
@@ -40,6 +42,7 @@ const Gallery = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
