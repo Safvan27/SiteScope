@@ -1,148 +1,213 @@
-
-import React, { useState } from 'react';
-import apiService from '../../services/api';
+import React, { useState } from "react";
+import apiService from "../../services/api";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { sites } from "../../pages/supervisor/data";
 
 const PhotoUploadComponent = () => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState({});
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('progress');
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [uploadProgress, setUploadProgress] = useState({});
+    const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("progress");
+    const [selectedSite, setSelectedSite] = useState("");
 
-  const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(files);
-  };
-
-  const handleUpload = async () => {
-    if (selectedFiles.length === 0) return;
-
-    try {
-      const formData = new FormData();
-      
-      // Add form data
-      formData.append('category', category);
-      formData.append('description', description);
-      formData.append('project_id', '1'); // You might want to make this dynamic
-      
-      // Add files
-      selectedFiles.forEach(file => {
-        formData.append('photos', file);
-      });
-
-      // Simulate upload progress for UI
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        setUploadProgress(prev => ({ ...prev, [file.name]: 0 }));
-        
-        for (let progress = 0; progress <= 100; progress += 20) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-          setUploadProgress(prev => ({ ...prev, [file.name]: progress }));
+    const submitUpload = () => {
+        if (selectedSite && selectedFiles.length > 0) {
+            handleUpload({
+                siteId: selectedSite,
+                category,
+                description,
+                files: selectedFiles,
+            });
         }
-      }
+    };
 
-      // Make actual API call
-      const response = await apiService.uploadPhotos(formData);
-      
-      // Reset form after upload
-      setSelectedFiles([]);
-      setUploadProgress({});
-      setDescription('');
-      alert('Photos uploaded successfully!');
-    } catch (error) {
-      console.error('Upload failed:', error);
-      alert('Upload failed: ' + error.message);
-    }
-  };
+    const handleFileSelect = (event) => {
+        const files = Array.from(event.target.files);
+        setSelectedFiles(files);
+    };
 
-  const removeFile = (index) => {
-    const newFiles = selectedFiles.filter((_, i) => i !== index);
-    setSelectedFiles(newFiles);
-  };
+    const handleUpload = async () => {
+        if (selectedFiles.length === 0) return;
 
-  return (
-    <div className="photo-upload-container">
-      <div className="upload-form">
-        <h3>Upload Construction Photos</h3>
-        
-        <div className="form-group">
-          <label>Photo Category:</label>
-          <select 
-            value={category} 
-            onChange={(e) => setCategory(e.target.value)}
-            className="category-select"
-          >
-            <option value="progress">Progress Update</option>
-            <option value="quality">Quality Check</option>
-            <option value="safety">Safety Inspection</option>
-            <option value="materials">Materials</option>
-            <option value="equipment">Equipment</option>
-          </select>
-        </div>
+        try {
+            const formData = new FormData();
 
-        <div className="form-group">
-          <label>Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe what these photos show..."
-            className="description-textarea"
-            rows="3"
-          />
-        </div>
+            // Add form data
+            formData.append("category", category);
+            formData.append("description", description);
+            formData.append("project_id", "1"); // You might want to make this dynamic
 
-        <div className="form-group">
-          <label>Select Photos:</label>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleFileSelect}
-            className="file-input"
-          />
-        </div>
+            // Add files
+            selectedFiles.forEach((file) => {
+                formData.append("photos", file);
+            });
 
-        {selectedFiles.length > 0 && (
-          <div className="selected-files">
-            <h4>Selected Files:</h4>
-            {selectedFiles.map((file, index) => (
-              <div key={index} className="file-item">
-                <div className="file-info">
-                  <span>{file.name}</span>
-                  <span className="file-size">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
-                </div>
-                <div className="file-actions">
-                  {uploadProgress[file.name] !== undefined && (
-                    <div className="progress-bar">
-                      <div 
-                        className="progress-fill" 
-                        style={{ width: `${uploadProgress[file.name]}%` }}
-                      ></div>
-                      <span className="progress-text">{uploadProgress[file.name]}%</span>
+            // Simulate upload progress for UI
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                setUploadProgress((prev) => ({ ...prev, [file.name]: 0 }));
+
+                for (let progress = 0; progress <= 100; progress += 20) {
+                    await new Promise((resolve) => setTimeout(resolve, 200));
+                    setUploadProgress((prev) => ({
+                        ...prev,
+                        [file.name]: progress,
+                    }));
+                }
+            }
+
+            // Make actual API call
+            const response = await apiService.uploadPhotos(formData);
+
+            // Reset form after upload
+            setSelectedFiles([]);
+            setUploadProgress({});
+            setDescription("");
+            alert("Photos uploaded successfully!");
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert("Upload failed: " + error.message);
+        }
+    };
+
+    const removeFile = (index) => {
+        const newFiles = selectedFiles.filter((_, i) => i !== index);
+        setSelectedFiles(newFiles);
+    };
+
+    return (
+        <div className="max-w-3xl mx-auto p-6">
+            <Card className="shadow-lg">
+                <CardContent className="space-y-6">
+                    <CardTitle className="text-2xl font-bold mb-4">
+                        Upload Construction Photos
+                    </CardTitle>
+
+                    <div className="space-y-2">
+                        <Label>Select Site</Label>
+                        <Select
+                            value={selectedSite}
+                            onValueChange={setSelectedSite}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Choose site..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {sites.map((site) => (
+                                    <SelectItem key={site.id} value={site.id}>
+                                        {site.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
-                  )}
-                  <button 
-                    onClick={() => removeFile(index)}
-                    className="remove-btn"
-                    type="button"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
 
-        <button 
-          onClick={handleUpload}
-          disabled={selectedFiles.length === 0}
-          className="upload-btn"
-        >
-          Upload Photos
-        </button>
-      </div>
-    </div>
-  );
+                    <div className="space-y-2">
+                        <Label>Photo Category</Label>
+                        <Select value={category} onValueChange={setCategory}>
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="progress">
+                                    Progress Update
+                                </SelectItem>
+                                <SelectItem value="quality">
+                                    Quality Check
+                                </SelectItem>
+                                <SelectItem value="safety">
+                                    Safety Inspection
+                                </SelectItem>
+                                <SelectItem value="materials">
+                                    Materials
+                                </SelectItem>
+                                <SelectItem value="equipment">
+                                    Equipment
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Describe what these photos show..."
+                            rows={3}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Select Photos</Label>
+                        <Input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleFileSelect}
+                        />
+                    </div>
+
+                    {selectedFiles.length > 0 && (
+                        <div className="space-y-2">
+                            {selectedFiles.map((file, index) => (
+                                <div
+                                    key={index}
+                                    className="flex justify-between items-center p-2 border rounded-md"
+                                >
+                                    <div className="text-sm">
+                                        {file.name} (
+                                        {(file.size / 1024 / 1024).toFixed(2)}{" "}
+                                        MB)
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        {uploadProgress[file.name] !==
+                                            undefined && (
+                                            <div className="w-32">
+                                                <Progress
+                                                    value={
+                                                        uploadProgress[
+                                                            file.name
+                                                        ]
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => removeFile(index)}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <Button
+                        onClick={submitUpload}
+                        disabled={!selectedSite || selectedFiles.length === 0}
+                    >
+                        Upload Photos
+                    </Button>
+                </CardContent>
+            </Card>
+        </div>
+    );
 };
 
 export default PhotoUploadComponent;

@@ -1,56 +1,84 @@
-
-import React from 'react';
+import React from "react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const SiteManager = ({ sites, onDeleteSite }) => {
-  return (
-    <div className="site-manager">
-      <div className="sites-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Site Name</th>
-              <th>Location</th>
-              <th>Status</th>
-              <th>Supervisor</th>
-              <th>Client</th>
-              <th>Budget</th>
-              <th>Timeline</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sites.map(site => (
-              <tr key={site.id}>
-                <td>{site.name}</td>
-                <td>{site.location}</td>
-                <td>
-                  <span className={`status ${site.status}`}>
-                    {site.status.replace('_', ' ')}
-                  </span>
-                </td>
-                <td>{site.supervisor}</td>
-                <td>{site.client}</td>
-                <td>${site.budget?.toLocaleString()}</td>
-                <td>{site.startDate} - {site.endDate}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button className="btn-edit">Edit</button>
-                    <button className="btn-view">View</button>
-                    <button 
-                      className="btn-delete"
-                      onClick={() => onDeleteSite(site.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    return (
+        <div className="overflow-auto rounded-xl border border-gray-200 shadow-md m-5">
+            <div className="p-4 rounded-xl bg-white shadow-sm border">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Site Name</TableHead>
+                            <TableHead>Location</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Supervisor</TableHead>
+                            <TableHead>Client</TableHead>
+                            <TableHead>Budget</TableHead>
+                            <TableHead>Timeline</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {sites.map((site) => (
+                            <TableRow key={site.id}>
+                                <TableCell>{site.name}</TableCell>
+                                <TableCell>{site.location}</TableCell>
+                                <TableCell>
+                                    <Badge
+                                        variant={
+                                            site.status === "in_progress"
+                                                ? "default"
+                                                : site.status === "completed"
+                                                ? "success"
+                                                : "destructive"
+                                        }
+                                    >
+                                        {site.status.replace("_", " ")}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell>{site.supervisor}</TableCell>
+                                <TableCell>{site.client}</TableCell>
+                                <TableCell>
+                                    ${site.budget?.toLocaleString()}
+                                </TableCell>
+                                <TableCell>
+                                    {site.startDate} - {site.endDate}
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        <Button size="sm" variant="outline">
+                                            Edit
+                                        </Button>
+                                        <Button size="sm" variant="secondary">
+                                            View
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="destructive"
+                                            onClick={() =>
+                                                onDeleteSite(site.id)
+                                            }
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
+    );
 };
 
 export default SiteManager;

@@ -1,113 +1,145 @@
 import React, { useState } from "react";
 import DashboardHeader from "../../components/common/DashboardHeader";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const SystemSettings = () => {
-  const [settings, setSettings] = useState({
-    siteName: "Construction Tracker",
-    emailNotifications: true,
-    autoReports: true,
-    backupFrequency: "daily",
-    maintenanceMode: false,
-  });
-
-  const handleSettingChange = (setting, value) => {
-    setSettings({
-      ...settings,
-      [setting]: value,
+    const [settings, setSettings] = useState({
+        siteName: "Construction Tracker",
+        emailNotifications: true,
+        autoReports: true,
+        backupFrequency: "daily",
+        maintenanceMode: false,
     });
-  };
 
-  return (
-    <div className="admin-dashboard">
-      <DashboardHeader title="System Settings" />
-      <div className="dashboard-content">
-        <div className="system-settings">
-          <h1>System Settings</h1>
+    const handleSettingChange = (setting, value) => {
+        setSettings({
+            ...settings,
+            [setting]: value,
+        });
+    };
 
-          <div className="settings-sections">
-            <div className="settings-section">
-              <h2>General Settings</h2>
-              <div className="setting-item">
-                <label>Site Name</label>
-                <input
-                  type="text"
-                  value={settings.siteName}
-                  onChange={(e) =>
-                    handleSettingChange("siteName", e.target.value)
-                  }
-                />
-              </div>
+    return (
+        <div className="admin-dashboard p-6 space-y-6">
+            <DashboardHeader title="System Settings" />
+            <div className="dashboard-content grid gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>General Settings</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="siteName">Site Name</Label>
+                            <Input
+                                id="siteName"
+                                value={settings.siteName}
+                                onChange={(e) =>
+                                    handleSettingChange(
+                                        "siteName",
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Notifications</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <Label>Email Notifications</Label>
+                            <Switch
+                                checked={settings.emailNotifications}
+                                onCheckedChange={(value) =>
+                                    handleSettingChange(
+                                        "emailNotifications",
+                                        value
+                                    )
+                                }
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Label>Automatic Reports</Label>
+                            <Switch
+                                checked={settings.autoReports}
+                                onCheckedChange={(value) =>
+                                    handleSettingChange("autoReports", value)
+                                }
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>System</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="backupFrequency">
+                                Backup Frequency
+                            </Label>
+                            <Select
+                                value={settings.backupFrequency}
+                                onValueChange={(value) =>
+                                    handleSettingChange(
+                                        "backupFrequency",
+                                        value
+                                    )
+                                }
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select frequency" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="daily">Daily</SelectItem>
+                                    <SelectItem value="weekly">
+                                        Weekly
+                                    </SelectItem>
+                                    <SelectItem value="monthly">
+                                        Monthly
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <Label>Maintenance Mode</Label>
+                            <Switch
+                                checked={settings.maintenanceMode}
+                                onCheckedChange={(value) =>
+                                    handleSettingChange(
+                                        "maintenanceMode",
+                                        value
+                                    )
+                                }
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div className="flex gap-4">
+                    <Button className="btn-primary">Save Settings</Button>
+                    <Button variant="outline" className="btn-secondary">
+                        Reset to Defaults
+                    </Button>
+                </div>
             </div>
-
-            <div className="settings-section">
-              <h2>Notifications</h2>
-              <div className="setting-item">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={settings.emailNotifications}
-                    onChange={(e) =>
-                      handleSettingChange(
-                        "emailNotifications",
-                        e.target.checked,
-                      )
-                    }
-                  />
-                  Email Notifications
-                </label>
-              </div>
-              <div className="setting-item">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={settings.autoReports}
-                    onChange={(e) =>
-                      handleSettingChange("autoReports", e.target.checked)
-                    }
-                  />
-                  Automatic Reports
-                </label>
-              </div>
-            </div>
-
-            <div className="settings-section">
-              <h2>System</h2>
-              <div className="setting-item">
-                <label>Backup Frequency</label>
-                <select
-                  value={settings.backupFrequency}
-                  onChange={(e) =>
-                    handleSettingChange("backupFrequency", e.target.value)
-                  }
-                >
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="monthly">Monthly</option>
-                </select>
-              </div>
-              <div className="setting-item">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={settings.maintenanceMode}
-                    onChange={(e) =>
-                      handleSettingChange("maintenanceMode", e.target.checked)
-                    }
-                  />
-                  Maintenance Mode
-                </label>
-              </div>
-            </div>
-
-            <div className="settings-actions">
-              <button className="btn-primary">Save Settings</button>
-              <button className="btn-secondary">Reset to Defaults</button>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default SystemSettings;

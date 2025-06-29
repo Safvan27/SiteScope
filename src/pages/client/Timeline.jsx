@@ -1,54 +1,55 @@
-
-import React from 'react';
-import DashboardHeader from '../../components/common/DashboardHeader';
+import React from "react";
+import DashboardHeader from "../../components/common/DashboardHeader";
 
 const Timeline = () => {
-  const timelineEvents = [
-    {
-      date: '2024-01-15',
-      title: 'Project Started',
-      description: 'Construction officially began',
-      type: 'milestone'
-    },
-    {
-      date: '2024-02-01',
-      title: 'Foundation Complete',
-      description: 'Foundation work finished ahead of schedule',
-      type: 'completion'
-    },
-    {
-      date: '2024-03-15',
-      title: 'Structure Work Started',
-      description: 'Beginning structural framework',
-      type: 'start'
-    },
-    {
-      date: '2024-04-10',
-      title: 'Progress Update',
-      description: 'Structure 80% complete',
-      type: 'update'
-    }
-  ];
+    const timelineEvents = [
+        {
+            date: "2024-01-15",
+            title: "Project Started",
+            description: "Construction officially began",
+            type: "milestone",
+        },
+        {
+            date: "2024-02-01",
+            title: "Foundation Complete",
+            description: "Foundation work finished ahead of schedule",
+            type: "completion",
+        },
+        {
+            date: "2024-03-15",
+            title: "Structure Work Started",
+            description: "Beginning structural framework",
+            type: "start",
+        },
+        {
+            date: "2024-04-10",
+            title: "Progress Update",
+            description: "Structure 80% complete",
+            type: "update",
+        },
+    ];
 
-  return (
-    <div className="client-dashboard">
-      <DashboardHeader title="Project Timeline" />
-      <div className="dashboard-content">
-      <div className="timeline-content">
-        {timelineEvents.map((event, index) => (
-          <div key={index} className="timeline-item">
-            <div className="timeline-marker"></div>
-            <div className="timeline-content-item">
-              <div className="timeline-date">{event.date}</div>
-              <h3>{event.title}</h3>
-              <p>{event.description}</p>
+    return (
+        <div className="client-dashboard p-6 space-y-6">
+            <DashboardHeader title="Project Timeline" />
+            <div className="dashboard-content">
+                <div className="timeline-content">
+                    {timelineEvents.map((event, index) => (
+                        <div key={index} className="timeline-item">
+                            <div className="timeline-marker"></div>
+                            <div className="timeline-content-item">
+                                <div className="timeline-date">
+                                    {event.date}
+                                </div>
+                                <h3>{event.title}</h3>
+                                <p>{event.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-          </div>
-        ))}
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Timeline;

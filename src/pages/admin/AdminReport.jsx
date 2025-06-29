@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-const Reports = () => {
+const AdminReport = () => {
     const [reportType, setReportType] = useState("site");
     const [selectedItem, setSelectedItem] = useState("");
     const [reportContent, setReportContent] = useState("");
@@ -29,8 +29,8 @@ const Reports = () => {
     };
 
     return (
-        <div className="supervisor-dashboard p-6 space-y-6">
-            <DashboardHeader title="Supervisor Reports" />
+        <div className="admin-dashboard p-6 space-y-6">
+            <DashboardHeader title="Admin Reports" />
             <Card className="max-w-3xl mx-auto">
                 <CardHeader>
                     <CardTitle>Generate and Send Reports</CardTitle>
@@ -102,4 +102,4 @@ const Reports = () => {
     );
 };
 
-export default Reports;
+export default AdminReport;
