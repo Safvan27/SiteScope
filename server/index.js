@@ -12,7 +12,7 @@ const taskRoutes = require("./routes/tasks");
 const photoRoutes = require("./routes/photos");
 
 const app = express();
-const PORT = import.meta.env.PORT;
+const PORT = import.meta.env.VITE_PORT;
 
 // Middleware
 app.use(helmet());

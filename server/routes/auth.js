@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
         if (userError || !userData) {
             return res.status(404).json({ error: "User profile not found" });
         }
-        const JWT_SECRET = import.meta.env.JWT_SECRET;
+        const JWT_SECRET = import.meta.env.VITE_JWT_SECRET;
         // Generate JWT token
         const token = jwt.sign(
             {
@@ -114,7 +114,7 @@ router.post("/register", async (req, res) => {
 router.get("/verify", async (req, res) => {
     try {
         const token = req.headers.authorization?.replace("Bearer ", "");
-        const JWT_SECRET = import.meta.env.JWT_SECRET;
+        const JWT_SECRET = import.meta.env.VITE_JWT_SECRET;
 
         if (!token) {
             return res.status(401).json({ error: "No token provided" });

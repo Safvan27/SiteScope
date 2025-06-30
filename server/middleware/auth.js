@@ -10,7 +10,7 @@ const authenticateToken = async (req, res, next) => {
     }
 
     try {
-        const JWT_SECRET = import.meta.env.JWT_SECRET;
+        const JWT_SECRET = import.meta.env.VITE_JWT_SECRET;
         const decoded = jwt.verify(token, JWT_SECRET || "your-secret-key");
         const result = await pool.query("SELECT * FROM users WHERE id = $1", [
             decoded.userId,
